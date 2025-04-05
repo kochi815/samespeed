@@ -77,14 +77,15 @@
   <div id="rankList">
     <h2>🏅 称号と報酬一覧</h2>
     <ul style="list-style: none; padding: 0;">
-      <li>⚡ 電光サメ：150コイン（～30秒）</li>
-      <li>💨 はやザメ：130コイン（～35秒）</li>
-      <li>🏄 スイスイサメ：115コイン（～38秒）</li>
-      <li>😎 がんばりザメ：100コイン（～41秒）</li>
-      <li>🙂 ふつうザメ：80コイン（～47秒）</li>
-      <li>🐢 のんびりサメ：45コイン（～55秒）</li>
-      <li>😴 うとうとサメ：30コイン（～70秒）</li>
-      <li>🐌 まったりサメ：10コイン（71秒以上）</li>
+      <li>🚀 神速サメ：200コイン（～45秒）</li>
+      <li>⚡ 電光サメ：150コイン（～50秒）</li>
+      <li>💨 はやザメ：120コイン（～55秒）</li>
+      <li>🏄 スイスイサメ：90コイン（～60秒）</li>
+      <li>😎 がんばりザメ：70コイン（～65秒）</li>
+      <li>🙂 ふつうザメ：50コイン（～70秒）</li>
+      <li>🐢 のんびりサメ：30コイン（～75秒）</li>
+      <li>😴 うとうとサメ：15コイン（～80秒）</li>
+      <li>🐌 まったりサメ：5コイン（81秒以上）</li>
     </ul>
   </div>
   <button id="startBtn">スタート</button>
@@ -174,25 +175,27 @@
     }
 
     function assignTitle(time) {
-      if (time <= 30) return "⚡ 電光サメ";
-      if (time <= 35) return "💨 はやザメ";
-      if (time <= 38) return "🏄 スイスイサメ";
-      if (time <= 41) return "😎 がんばりザメ";
-      if (time <= 47) return "🙂 ふつうザメ";
-      if (time <= 55) return "🐢 のんびりサメ";
-      if (time <= 70) return "😴 うとうとサメ";
+      if (time <= 45) return "🚀 神速サメ";
+      if (time <= 50) return "⚡ 電光サメ";
+      if (time <= 55) return "💨 はやザメ";
+      if (time <= 60) return "🏄 スイスイサメ";
+      if (time <= 65) return "😎 がんばりザメ";
+      if (time <= 70) return "🙂 ふつうザメ";
+      if (time <= 75) return "🐢 のんびりサメ";
+      if (time <= 80) return "😴 うとうとサメ";
       return "🐌 まったりサメ";
     }
 
     function calculateCoins(time) {
-      if (time <= 30) return 150;
-      if (time <= 35) return 130;
-      if (time <= 38) return 115;
-      if (time <= 41) return 100;
-      if (time <= 47) return 80;
-      if (time <= 55) return 45;
-      if (time <= 70) return 30;
-      return 10;
+      if (time <= 45) return 200;
+      if (time <= 50) return 150;
+      if (time <= 55) return 120;
+      if (time <= 60) return 90;
+      if (time <= 65) return 70;
+      if (time <= 70) return 50;
+      if (time <= 75) return 30;
+      if (time <= 80) return 15;
+      return 5;
     }
 
     function endGame() {
