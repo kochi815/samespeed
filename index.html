@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>サメスピードチャレンジ</title>
+  <style>
+    body {
+      font-family: "Courier New", monospace;
+      text-align: center;
+      background-color: #e0f7fa;
+      margin: 0;
+      padding: 10px;
+      overflow-x: hidden;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    #question {
+      font-size: 4em;
+      margin: 40px 0 20px 0;
+    }
+    #questionNumber, #timer, #titleBadge, #coinInfo {
+      font-size: 1em;
+      color: #004d40;
+      margin: 5px 0;
+    }
+    #info {
+      font-size: 1.2em;
+      color: #006064;
+    }
+    #startBtn, #homeBtn, #rankBtn {
+      font-size: 1.2em;
+      padding: 10px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #00acc1;
+      color: white;
+      cursor: pointer;
+    }
+    html, body {
+      height: 100%;
+    }
+    #body {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      min-height: 100vh;
+      overflow-y: auto;
+      padding-bottom: 20px;
+    }
+    #rankList {
+      display: none;
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 1em;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      color: #004d40;
+    }
+  </style>
+</head>
+<body id="body">
+  <h1>サメスピードチャレンジ</h1>
+  <div id="coinInfo">🪙 サメコイン: 0</div>
+  <div id="info">スタートボタンを押してね</div>
+  <div id="questionNumber"></div>
+  <div id="timer"></div>
+  <div id="question">🦈</div>
+  <div id="titleBadge"></div>
+  <div id="rankList">
+    <h2>🏅 称号と報酬一覧</h2>
+    <ul style="list-style: none; padding: 0;">
+      <li>⚡ 電光サメ：150コイン（～30秒）</li>
+      <li>💨 はやザメ：130コイン（～35秒）</li>
+      <li>🏄 スイスイサメ：115コイン（～38秒）</li>
+      <li>😎 がんばりザメ：100コイン（～41秒）</li>
+      <li>🙂 ふつうザメ：80コイン（～47秒）</li>
+      <li>🐢 のんびりサメ：45コイン（～55秒）</li>
+      <li>😴 うとうとサメ：30コイン（～70秒）</li>
+      <li>🐌 まったりサメ：10コイン（71秒以上）</li>
+    </ul>
+  </div>
+  <button id="startBtn">スタート</button>
+  <button id="homeBtn" style="display: none;">ホームにもどる</button>
+  <button id="rankBtn" style="display: inline-block;">称号一覧</button>
+
+<script>
+    const totalQuestions = 20;
+    let problems = [];
+    let selected = [];
+    let index = 0;
+    let showingAnswer = false;
+    let startTime = null;
+    let gameStarted = false;
+    let timerInterval;
+
+    const question = document.getElementById("question");
+    const questionNumber = document.getElementById("questionNumber");
+    const timer = document.getElementById("timer");
+    const info = document.getElementById("info");
+    const titleBadge = document.getElementById("titleBadge");
+    const startBtn = document.getElementById("startBtn");
+    const homeBtn = document.getElementById("homeBtn");
+    const coinInfo = document.getElementById("coinInfo");
+    const rankBtn = document.getElementById("rankBtn");
+    const rankList = document.getElementById("rankList");
+
+    rankBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      rankList.style.display = rankList.style.display === "none" ? "block" : "none";
+    });
+
+    function toggleRankButton(show) {
+      rankBtn.style.display = show ? "inline-block" : "none";
+    }
+
+    function getCoins() {
+      return parseInt(localStorage.getItem("sharkCoins") || "0");
+    }
+
+    function setCoins(value) {
+      localStorage.setItem("sharkCoins", value);
+      coinInfo.textContent = `🪙 サメコイン: ${value}`;
+    }
+
+    function generateProblems() {
+      problems = [];
+      for (let a = 1; a < 10; a++) {
+        for (let b = 1; b < 10; b++) {
+          problems.push({ q: `${a} + ${b}`, a: a + b });
+        }
+      }
+      problems.sort(() => Math.random() - 0.5);
+      selected = problems.slice(0, totalQuestions);
+    }
+
+    function updateTimer() {
+      const now = Date.now();
+      const elapsed = ((now - startTime) / 1000).toFixed(1);
+      timer.textContent = `タイム: ${elapsed} 秒`;
+    }
+
+    function showQuestion() {
+      if (index < selected.length) {
+        questionNumber.textContent = `(${index + 1}/${totalQuestions})`;
+        question.textContent = selected[index].q;
+        showingAnswer = false;
+      } else {
+        endGame();
+      }
+    }
+
+    function showAnswer() {
+      question.textContent = selected[index].a;
+      showingAnswer = true;
+    }
+
+    function nextStep() {
+      if (!gameStarted) return;
+      if (!showingAnswer) {
+        showAnswer();
+      } else {
+        index++;
+        showQuestion();
+      }
+    }
+
+    function assignTitle(time) {
+      if (time <= 30) return "⚡ 電光サメ";
+      if (time <= 35) return "💨 はやザメ";
+      if (time <= 38) return "🏄 スイスイサメ";
+      if (time <= 41) return "😎 がんばりザメ";
+      if (time <= 47) return "🙂 ふつうザメ";
+      if (time <= 55) return "🐢 のんびりサメ";
+      if (time <= 70) return "😴 うとうとサメ";
+      return "🐌 まったりサメ";
+    }
+
+    function calculateCoins(time) {
+      if (time <= 30) return 150;
+      if (time <= 35) return 130;
+      if (time <= 38) return 115;
+      if (time <= 41) return 100;
+      if (time <= 47) return 80;
+      if (time <= 55) return 45;
+      if (time <= 70) return 30;
+      return 10;
+    }
+
+    function endGame() {
+      toggleRankButton(true);
+      clearInterval(timerInterval);
+      gameStarted = false;
+      homeBtn.style.display = "inline-block";
+      const endTime = Date.now();
+      const elapsed = ((endTime - startTime) / 1000).toFixed(1);
+      info.innerHTML = `<span class="highlight">おわり！タイム：${elapsed} 秒</span>`;
+      titleBadge.textContent = assignTitle(elapsed);
+
+      const earned = calculateCoins(elapsed);
+      const current = getCoins();
+      setCoins(current + earned);
+
+      setTimeout(() => {
+        alert(`🎉 ${earned} コインを獲得したよ！`);
+      }, 300);
+    }
+
+    startBtn.addEventListener("click", () => {
+      document.documentElement.style.overflowY = "hidden";
+      document.body.style.overflowY = "hidden";
+      questionNumber.textContent = "";
+      timer.textContent = "";
+      toggleRankButton(false);
+      generateProblems();
+      index = 0;
+      gameStarted = true;
+      startTime = Date.now();
+      startBtn.style.display = "none";
+      homeBtn.style.display = "none";
+      info.textContent = "がんばってね！";
+      titleBadge.textContent = "";
+      showQuestion();
+      timerInterval = setInterval(updateTimer, 100);
+    });
+
+    homeBtn.addEventListener("click", () => {
+      document.documentElement.style.overflowY = "auto";
+      document.body.style.overflowY = "auto";
+      location.reload();
+    });
+
+    document.body.addEventListener("click", (e) => {
+      const ignore = ["startBtn", "rankBtn", "homeBtn"];
+      if (!ignore.includes(e.target.id)) {
+        nextStep();
+      }
+    });
+
+    setCoins(getCoins());
+  </script>
+</body>
+</html>
