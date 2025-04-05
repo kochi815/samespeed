@@ -2,71 +2,162 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>サメスピードチャレンジ</title>
   <style>
+    /* 修正点1: bodyスタイルを統合し、#bodyセレクタを削除 */
     body {
-      font-family: "Courier New", monospace;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
       text-align: center;
-      background-color: #e0f7fa;
+      background-color: #e0f7fa; /* 水色系背景 */
       margin: 0;
-      padding: 10px;
+      padding: 15px;
       overflow-x: hidden;
-    }
-    h1 {
-      font-size: 2em;
-    }
-    #question {
-      font-size: 4em;
-      margin: 40px 0 20px 0;
-    }
-    #questionNumber, #timer, #titleBadge, #coinInfo {
-      font-size: 1em;
-      color: #004d40;
-      margin: 5px 0;
-    }
-    #info {
-      font-size: 1.2em;
-      color: #006064;
-    }
-    #startBtn, #homeBtn, #rankBtn {
-      font-size: 1.2em;
-      padding: 10px 30px;
-      margin: 10px;
-      border: none;
-      border-radius: 10px;
-      background-color: #00acc1;
-      color: white;
-      cursor: pointer;
-    }
-    html, body {
-      height: 100%;
-    }
-    #body {
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
       min-height: 100vh;
-      overflow-y: auto;
-      padding-bottom: 20px;
+      overflow-y: auto; /* 初期はスクロール可 */
+      padding-bottom: 30px;
+      height: 100%;
+      color: #444;
     }
+    html {
+      height: 100%;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #00796b; /* 少し濃い青緑 */
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+
+    #question {
+      font-size: 4.5em;
+      margin: 30px 0 30px 0;
+      color: #004d40; /* 濃い緑 */
+      font-weight: 700;
+      line-height: 1.2;
+      min-height: 1.5em;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #questionNumber, #timer {
+        font-size: 1.1em;
+        color: #004d40;
+        margin: 3px 0;
+    }
+    #coinInfo {
+        font-size: 1.1em;
+        color: #004d40;
+        margin-bottom: 10px;
+    }
+    #titleBadge {
+        font-size: 1.3em;
+        color: #00acc1; /* ボタンと同系色 */
+        margin: 15px 0;
+        font-weight: 700;
+        min-height: 1.3em;
+    }
+    #info {
+      font-size: 1.2em;
+      color: #006064; /* やや濃いシアン */
+      margin-bottom: 20px;
+      min-height: 1.5em;
+    }
+
+    #startBtn, #homeBtn, #rankBtn {
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 1.3em;
+      padding: 15px 35px;
+      margin: 10px;
+      border: none;
+      border-radius: 30px;
+      background-color: #00acc1; /* シアン */
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      font-weight: 700;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    #startBtn:hover, #homeBtn:hover, #rankBtn:hover {
+      background-color: #00838f; /* 少し濃いシアン */
+    }
+    #startBtn:active, #homeBtn:active, #rankBtn:active {
+        transform: scale(0.97);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
     #rankList {
       display: none;
-      margin-top: 20px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
+      margin-top: 25px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
       text-align: left;
       font-size: 1em;
       max-width: 500px;
+      width: 90%;
       margin-left: auto;
       margin-right: auto;
       color: #004d40;
+      border: 1px solid #b2ebf2; /* 薄いシアン */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    #rankList h2 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #00796b;
+      font-size: 1.4em;
+      font-weight: 700;
+    }
+    #rankList ul {
+      list-style: none;
+      padding: 0;
+    }
+    #rankList li {
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #e0f7fa; /* 背景と同系色の薄い色 */
+      line-height: 1.5;
+    }
+    #rankList li:last-child {
+      border-bottom: none;
+    }
+
+    .highlight {
+      color: #00796b;
+      font-weight: bold;
+    }
+
+    @keyframes fadeInScaleUp {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-reveal {
+      animation: fadeInScaleUp 0.3s ease-out;
+    }
+
+    /* レスポンシブ対応は省略（必要であれば前のコードからコピー） */
+    @media (max-width: 600px) {
+        body { padding: 10px; padding-bottom: 20px; }
+        h1 { font-size: 1.8em; }
+        #question { font-size: 3.5em; margin: 20px 0 20px 0; }
+        #startBtn, #homeBtn, #rankBtn { font-size: 1.1em; padding: 12px 30px; border-radius: 25px; }
+        #rankList { width: 90%; padding: 15px; }
+        #rankList h2 { font-size: 1.3em; }
     }
   </style>
 </head>
-<body id="body">
+<body>
   <h1>サメスピードチャレンジ</h1>
   <div id="coinInfo">🪙 サメコイン: 0</div>
   <div id="info">スタートボタンを押してね</div>
@@ -77,15 +168,15 @@
   <div id="rankList">
     <h2>🏅 称号と報酬一覧</h2>
     <ul style="list-style: none; padding: 0;">
-      <li>🚀 神速サメ：200コイン（～45秒）</li>
-      <li>⚡ 電光サメ：150コイン（～50秒）</li>
-      <li>💨 はやザメ：120コイン（～55秒）</li>
-      <li>🏄 スイスイサメ：90コイン（～60秒）</li>
-      <li>😎 がんばりザメ：70コイン（～65秒）</li>
-      <li>🙂 ふつうザメ：50コイン（～70秒）</li>
-      <li>🐢 のんびりサメ：30コイン（～75秒）</li>
-      <li>😴 うとうとサメ：15コイン（～80秒）</li>
-      <li>🐌 まったりサメ：5コイン（81秒以上）</li>
+      <li>🚀 神速サメ：200コイン（～45.0秒）</li>
+      <li>⚡ 電光サメ：150コイン（～50.0秒）</li>
+      <li>💨 はやザメ：120コイン（～55.0秒）</li>
+      <li>🏄 スイスイサメ：90コイン（～60.0秒）</li>
+      <li>😎 がんばりザメ：70コイン（～65.0秒）</li>
+      <li>🙂 ふつうザメ：50コイン（～70.0秒）</li>
+      <li>🐢 のんびりサメ：30コイン（～75.0秒）</li>
+      <li>😴 うとうとサメ：15コイン（～80.0秒）</li>
+      <li>🐌 まったりサメ：5コイン（80.1秒～）</li>
     </ul>
   </div>
   <button id="startBtn">スタート</button>
@@ -93,7 +184,7 @@
   <button id="rankBtn" style="display: inline-block;">称号一覧</button>
 
 <script>
-    const totalQuestions = 20;
+    const totalQuestions = 20; // 問題数
     let problems = [];
     let selected = [];
     let index = 0;
@@ -102,6 +193,7 @@
     let gameStarted = false;
     let timerInterval;
 
+    // DOM要素取得
     const question = document.getElementById("question");
     const questionNumber = document.getElementById("questionNumber");
     const timer = document.getElementById("timer");
@@ -113,16 +205,44 @@
     const rankBtn = document.getElementById("rankBtn");
     const rankList = document.getElementById("rankList");
 
+    // --- 修正点2: 称号とコインのロジックを統合 ---
+    const ranks = [
+      { maxTime: 45.0, title: "🚀 神速サメ", coins: 200 },
+      { maxTime: 50.0, title: "⚡ 電光サメ", coins: 150 },
+      { maxTime: 55.0, title: "💨 はやザメ", coins: 120 },
+      { maxTime: 60.0, title: "🏄 スイスイサメ", coins: 90 },
+      { maxTime: 65.0, title: "😎 がんばりザメ", coins: 70 },
+      { maxTime: 70.0, title: "🙂 ふつうザメ", coins: 50 },
+      { maxTime: 75.0, title: "🐢 のんびりサメ", coins: 30 },
+      { maxTime: 80.0, title: "😴 うとうとサメ", coins: 15 },
+      { maxTime: Infinity, title: "🐌 まったりサメ", coins: 5 } // 最後のエントリー
+    ];
+
+    // 時間に応じたランク情報（称号とコイン）を取得する関数
+    function getRank(time) {
+      const numericTime = parseFloat(time); // 比較のために数値に変換
+      for (const rank of ranks) {
+        if (numericTime <= rank.maxTime) {
+          return rank;
+        }
+      }
+      // 通常はInfinityでキャッチされるが、念のため最後を返す
+      return ranks[ranks.length - 1];
+    }
+    // --- 修正点2 ここまで ---
+
     rankBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      e.stopImmediatePropagation();
+      e.stopPropagation();
       rankList.style.display = rankList.style.display === "none" ? "block" : "none";
+      // サウンドは今回なし
     });
 
     function toggleRankButton(show) {
       rankBtn.style.display = show ? "inline-block" : "none";
     }
 
+    // localStorageのキーを'sharkCoins'に変更
     function getCoins() {
       return parseInt(localStorage.getItem("sharkCoins") || "0");
     }
@@ -134,13 +254,20 @@
 
     function generateProblems() {
       problems = [];
-      for (let a = 1; a < 10; a++) {
-        for (let b = 1; b < 10; b++) {
+      // 1桁+1桁の足し算を生成
+      for (let a = 1; a < 10; a++) { // 1から9
+        for (let b = 1; b < 10; b++) { // 1から9
+          // 簡単すぎる問題(例: 1+1)や繰り上がり有無などを考慮して調整も可能
           problems.push({ q: `${a} + ${b}`, a: a + b });
         }
       }
-      problems.sort(() => Math.random() - 0.5);
-      selected = problems.slice(0, totalQuestions);
+      // --- 修正点3: Fisher-Yatesシャッフルに変更 ---
+      for (let i = problems.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [problems[i], problems[j]] = [problems[j], problems[i]]; // 要素を入れ替え
+      }
+      // --- 修正点3 ここまで ---
+      selected = problems.slice(0, totalQuestions); // 20問選択
     }
 
     function updateTimer() {
@@ -149,18 +276,30 @@
       timer.textContent = `タイム: ${elapsed} 秒`;
     }
 
+    // 問題表示関数 (アニメーション適用)
     function showQuestion() {
       if (index < selected.length) {
         questionNumber.textContent = `(${index + 1}/${totalQuestions})`;
+        // --- 修正点7: アニメーション適用 ---
         question.textContent = selected[index].q;
+        question.classList.remove('animate-reveal');
+        void question.offsetWidth;
+        question.classList.add('animate-reveal');
+        // --- 修正点7 ここまで ---
         showingAnswer = false;
       } else {
         endGame();
       }
     }
 
+    // 回答表示関数 (アニメーション適用)
     function showAnswer() {
+      // --- 修正点7: アニメーション適用 ---
       question.textContent = selected[index].a;
+      question.classList.remove('animate-reveal');
+      void question.offsetWidth;
+      question.classList.add('animate-reveal');
+      // --- 修正点7 ここまで ---
       showingAnswer = true;
     }
 
@@ -174,29 +313,7 @@
       }
     }
 
-    function assignTitle(time) {
-      if (time <= 45) return "🚀 神速サメ";
-      if (time <= 50) return "⚡ 電光サメ";
-      if (time <= 55) return "💨 はやザメ";
-      if (time <= 60) return "🏄 スイスイサメ";
-      if (time <= 65) return "😎 がんばりザメ";
-      if (time <= 70) return "🙂 ふつうザメ";
-      if (time <= 75) return "🐢 のんびりサメ";
-      if (time <= 80) return "😴 うとうとサメ";
-      return "🐌 まったりサメ";
-    }
-
-    function calculateCoins(time) {
-      if (time <= 45) return 200;
-      if (time <= 50) return 150;
-      if (time <= 55) return 120;
-      if (time <= 60) return 90;
-      if (time <= 65) return 70;
-      if (time <= 70) return 50;
-      if (time <= 75) return 30;
-      if (time <= 80) return 15;
-      return 5;
-    }
+    // assignTitle と calculateCoins 関数は不要になったため削除
 
     function endGame() {
       toggleRankButton(true);
@@ -205,16 +322,26 @@
       homeBtn.style.display = "inline-block";
       const endTime = Date.now();
       const elapsed = ((endTime - startTime) / 1000).toFixed(1);
-      info.innerHTML = `<span class="highlight">おわり！タイム：${elapsed} 秒</span>`;
-      titleBadge.textContent = assignTitle(elapsed);
 
-      const earned = calculateCoins(elapsed);
+      // --- 修正点2: getRank関数を使う ---
+      const resultRank = getRank(elapsed);
+      info.innerHTML = `<span class="highlight">おわり！タイム：${elapsed} 秒</span>`;
+      titleBadge.textContent = resultRank.title;
+      const earned = resultRank.coins;
+      // --- 修正点2 ここまで ---
+
       const current = getCoins();
       setCoins(current + earned);
+
+      // --- 修正点6: スクロールを有効に戻す ---
+      document.documentElement.style.overflowY = "auto";
+      document.body.style.overflowY = "auto";
+      // --- 修正点6 ここまで ---
 
       setTimeout(() => {
         alert(`🎉 ${earned} コインを獲得したよ！`);
       }, 300);
+      // サウンド停止は今回なし
     }
 
     startBtn.addEventListener("click", () => {
@@ -223,6 +350,9 @@
       questionNumber.textContent = "";
       timer.textContent = "";
       toggleRankButton(false);
+      // --- 修正点5: 称号リストを隠す ---
+      rankList.style.display = "none";
+      // --- 修正点5 ここまで ---
       generateProblems();
       index = 0;
       gameStarted = true;
@@ -231,24 +361,46 @@
       homeBtn.style.display = "none";
       info.textContent = "がんばってね！";
       titleBadge.textContent = "";
+      question.textContent = ''; // 前の問題をクリア
       showQuestion();
       timerInterval = setInterval(updateTimer, 100);
+      // サウンド開始は今回なし
     });
 
     homeBtn.addEventListener("click", () => {
-      document.documentElement.style.overflowY = "auto";
-      document.body.style.overflowY = "auto";
+      // サウンド停止/再生は今回なし
+      // スクロール有効化はreloadされるので必須ではない
       location.reload();
     });
 
+    // --- 修正点4: bodyクリック判定の改善 ---
     document.body.addEventListener("click", (e) => {
-      const ignore = ["startBtn", "rankBtn", "homeBtn"];
-      if (!ignore.includes(e.target.id)) {
+      let targetElement = e.target;
+      let isButtonOrRankList = false;
+      // 無視する要素のIDリスト
+      const ignoreIds = ["startBtn", "rankBtn", "homeBtn"];
+
+      while (targetElement != null) {
+          // IDが一致するか、またはクリックした要素が#rankListの中にあるか
+          if (ignoreIds.includes(targetElement.id) || targetElement.closest('#rankList')) {
+              isButtonOrRankList = true;
+              break;
+          }
+          targetElement = targetElement.parentElement;
+      }
+
+      // ボタン・ランク一覧以外をクリックし、かつゲームが開始されている場合のみ進行
+      if (!isButtonOrRankList && gameStarted) {
+        // サウンド再生は今回なし
         nextStep();
       }
     });
+    // --- 修正点4 ここまで ---
 
+    // 初期コイン表示
     setCoins(getCoins());
+
+    window.addEventListener('resize', () => { /* リサイズ処理は省略 */ });
   </script>
 </body>
 </html>
