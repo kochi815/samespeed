@@ -1,0 +1,511 @@
+@charset "UTF-8";
+
+/* =========================================
+   ベーススタイル
+   ========================================= */
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+    color: #444;
+    user-select: none;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    font-family: inherit;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    touch-action: manipulation;
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding: 10px; /* 余白を少し調整 */
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. モード選択 & 2. ランキング (変更軽微)
+   ========================================= */
+#modeSelectScreen, #rankingViewScreen {
+    /* 既存のまま */
+}
+
+.title-logo {
+    font-size: 1.8em;
+    color: #0097a7;
+    margin: 20px 0 5px;
+    text-shadow: 2px 2px 0 #fff;
+    text-align: center;
+}
+
+.subtitle {
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.main-menu-btn {
+    background-color: #fbc02d;
+    color: #fff;
+    font-size: 1.1em;
+    padding: 10px 30px;
+    border-radius: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 0 #f57f17;
+}
+
+.mode-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.grade-section h3 {
+    margin: 0 0 10px 5px;
+    color: #006064;
+    border-left: 6px solid #00bcd4;
+    padding-left: 10px;
+    font-size: 1.1em;
+}
+
+.mode-btn {
+    position: relative;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    border-radius: 15px;
+    background: #fff;
+    color: #333;
+    box-shadow: 0 4px 0 #b2ebf2;
+    border: 2px solid #00bcd4;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.best-badge {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ffd700;
+    color: #d32f2f;
+    font-size: 0.85em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+    font-weight: 900;
+}
+
+/* ランキング閲覧画面用パーツ */
+#rankingViewScreen { background-color: #fff8e1; }
+#rankingViewScreen h2 { color: #f57f17; margin-bottom: 10px; }
+.ranking-instruction { font-size: 0.9em; color: #777; margin-bottom: 15px; }
+.ranking-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; max-width: 600px; margin-bottom: 20px; }
+.rank-tab-btn { flex: 1 1 20%; min-width: 70px; padding: 8px 5px; font-size: 0.85em; border-radius: 10px; background-color: #fff; border: 2px solid #ddd; color: #888; }
+.rank-tab-btn.active { background-color: #00bcd4; border-color: #00838f; color: #fff; box-shadow: 0 2px 0 #006064; transform: scale(1.05); z-index: 2; }
+.ranking-display-box { width: 95%; max-width: 400px; background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 0 #ccc; margin-bottom: 20px; min-height: 250px; }
+#rankingViewTitle { text-align: center; color: #0097a7; margin-top: 0; margin-bottom: 10px; border-bottom: 2px dashed #b2ebf2; padding-bottom: 5px; }
+
+
+/* =========================================
+   3. ゲーム画面（5段階演出 & HPバー化）
+   ========================================= */
+#gameScreen {
+    /* Flexコンテナ設定：各要素の順番をorderで入れ替えるため */
+    display: flex; 
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    background-color: #e0f7fa;
+    transition: background 0.5s ease;
+    overflow: hidden; /* 背景エフェクトのはみ出し防止 */
+    position: relative;
+}
+
+/* --- コンボレベル別背景 (5段階) --- */
+
+/* Lv.1 (0-9): 通常 (指定なし) */
+
+/* Lv.2 (10-19): 集中線 (マンガ風) */
+#gameScreen.bg-level-2 {
+    background: repeating-conic-gradient(
+        from 0deg,
+        #e0f7fa 0deg 10deg,
+        #b2ebf2 10deg 20deg
+    );
+    background-size: cover;
+}
+
+/* Lv.3 (20-29): ヒートアップ (炎・揺らぎ) */
+#gameScreen.bg-level-3 {
+    background: radial-gradient(circle at center, #fff3e0 20%, #ffcc80 100%);
+    box-shadow: inset 0 0 50px #ff6f00; /* 画面端が赤く燃える */
+}
+
+/* Lv.4 (30-39): パーティ (紙吹雪風ドット) */
+#gameScreen.bg-level-4 {
+    background-color: #f8bbd0;
+    background-image: radial-gradient(#ff4081 15%, transparent 16%),
+                      radial-gradient(#7c4dff 15%, transparent 16%);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    animation: bgScroll 2s linear infinite; /* 背景が流れる */
+}
+@keyframes bgScroll {
+    0% { background-position: 0 0, 20px 20px; }
+    100% { background-position: 40px 40px, 60px 60px; }
+}
+
+/* Lv.5 (40~): ゲーミングレインボー (最強) */
+#gameScreen.bg-level-5 {
+    background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 1800% 1800%;
+    animation: rainbowGlow 2s ease infinite;
+}
+@keyframes rainbowGlow { 
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+
+
+/* --- レイアウト順序の変更 (Flexbox Order) --- */
+/* 上から: やめるボタン/スコア -> 敵 -> HPゲージ -> 問題 -> 選択肢 */
+
+#scoreHeader { order: 1; width: 100%; text-align: right; box-sizing: border-box; padding: 5px 10px; }
+#quitBtn { order: 0; position: absolute; top: 10px; left: 10px; z-index: 10; } 
+/* ※quitBtnはabsoluteなのでorder関係ないが、scoreHeaderとの兼ね合いで配置 */
+
+#enemyArea {
+    order: 2;
+    font-size: 6em;
+    height: 120px;
+    margin: 10px 0;
+    position: relative;
+    z-index: 5; /* コンボ文字より手前に */
+}
+
+/* --- HPゲージ (旧タイムゲージ) --- */
+#timeGaugeHeader {
+    order: 3; /* 敵と問題の間へ移動 */
+    width: 90%;
+    max-width: 400px;
+    margin: 5px auto 15px; /* 上下マージンで調整 */
+    position: relative;
+}
+
+#timeGaugeContainer {
+    width: 100%;
+    height: 25px; /* 少し太くしてRPGのHPバーっぽく */
+    background-color: #37474f; /* 背景を濃く */
+    border-radius: 8px; /* 角丸を少し抑えめに */
+    border: 3px solid #fff;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    overflow: hidden;
+    position: relative;
+}
+
+/* HP文字ラベル（疑似要素で追加） */
+#timeGaugeContainer::after {
+    content: "HP";
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 0.8em;
+    font-weight: 900;
+    z-index: 2;
+    text-shadow: 1px 1px 0 #000;
+}
+
+#timeGaugeBar {
+    height: 100%;
+    width: 100%;
+    transition: width 0.2s linear; /* キビキビ動くように */
+    border-right: 2px solid rgba(255,255,255,0.5);
+}
+
+/* HPバーの色設定（より鮮やかに） */
+.gauge-safe { background: linear-gradient(180deg, #00e676, #00c853); }
+.gauge-warning { background: linear-gradient(180deg, #ffea00, #ffd600); }
+.gauge-danger { 
+    background: linear-gradient(180deg, #ff1744, #d50000); 
+    animation: dangerBlink 0.2s infinite alternate; /* ピンチのとき点滅 */
+}
+@keyframes dangerBlink { from { opacity: 1; } to { opacity: 0.7; } }
+
+/* 回復時のフラッシュ */
+.bar-heal { filter: brightness(2.0); transition: filter 0.1s; }
+
+/* 時間テキストは非表示にするか、小さく添える（今回はHPバー内に統合した雰囲気にするため一旦非表示気味に） */
+#timeText {
+    display: none; /* 数値よりもバーの長さで直感的に */
+}
+
+
+#questionArea {
+    order: 4;
+    width: 100%;
+    text-align: center;
+}
+
+#questionText {
+    font-size: 3.8em;
+    margin: 0 0 15px;
+    font-weight: 900;
+    color: #333;
+    text-shadow: 3px 3px 0 #fff;
+    z-index: 10;
+    position: relative;
+}
+
+#answerChoices {
+    order: 5;
+    /* 2x2グリッド */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 95%;
+    max-width: 450px;
+    margin-bottom: 10px;
+}
+
+.choice-btn {
+    font-size: 2.2em;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    width: 100%;
+    height: 80px;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 3px solid #ff9800; /* オレンジ枠 */
+    border-bottom-width: 6px; /* 立体感 */
+    color: #ef6c00;
+    font-weight: 800;
+    transition: margin-top 0.1s, border-bottom-width 0.1s;
+}
+
+.choice-btn:active {
+    margin-top: 4px;
+    border-bottom-width: 2px;
+}
+
+
+/* --- NEW: コンボ表示（邪魔にならない配置） --- */
+.combo-display-bg {
+    position: absolute;
+    top: 15%;      /* 敵の後ろあたり */
+    left: 50%;
+    transform: translateX(-50%) rotate(-10deg); /* 斜めにして勢いを出す */
+    font-size: 6em; /* 超巨大 */
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.4); /* 半透明 */
+    -webkit-text-stroke: 2px rgba(0,0,0,0.1);
+    z-index: 1; /* 敵(z-index:5)より後ろ */
+    pointer-events: none;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+}
+.combo-display-bg.show {
+    opacity: 0.6;
+    transform: translateX(-50%) rotate(-10deg) scale(1.2);
+}
+
+
+/* --- 敵ダメージ演出（強化版） --- */
+.enemy-damage { animation: shake 0.3s; }
+
+/* Lv4以上でのダメージ：大きく弾ける */
+.enemy-damage-heavy { 
+    animation: popShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; 
+    filter: invert(0.5); /* 色反転も入れて衝撃を表現 */
+}
+
+
+/* =========================================
+   4. リザルト & その他共通
+   ========================================= */
+#resultScreen { background-color: #fff3e0; }
+.final-score-area { background: #fff; padding: 15px 40px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+#finalScoreDisplay { font-size: 2.8em; font-weight: 900; color: #d84315; }
+#rankInInputArea { background-color: #fff9c4; padding: 15px; border-radius: 15px; border: 3px dashed #fbc02d; margin-bottom: 20px; width: 90%; max-width: 400px; }
+.rank-in-msg { font-size: 1.3em; color: #f57f17; animation: bounce 0.6s infinite alternate; }
+.user-select-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+.user-btn { flex: 1 1 40%; font-size: 1.1em; padding: 12px 5px; background-color: #fff; border: 2px solid #ffb74d; border-radius: 10px; color: #e65100; box-shadow: 0 3px 0 #ffe0b2; }
+#rankingBoardArea { width: 95%; max-width: 400px; background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 0 #ccc; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; }
+th { background-color: #eee; padding: 6px; color: #555; }
+td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; font-weight: bold; font-size: 1.1em; }
+.rank-1 { color: #d4af37; font-size: 1.3em; }
+.result-buttons { display: flex; gap: 15px; }
+.action-btn { background-color: #66bb6a; color: #fff; padding: 15px 30px; border-radius: 30px; font-size: 1.2em; box-shadow: 0 4px 0 #2e7d32; min-width: 150px; }
+.sub-btn { background-color: #bdbdbd; color: #fff; padding: 15px 20px; border-radius: 30px; box-shadow: 0 4px 0 #757575; }
+
+/* アニメーション定義 */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes popShake {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.6) rotate(-15deg); }
+    60% { transform: scale(1.6) rotate(15deg); }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+
+.flash-red { animation: bgFlashRed 0.2s; }
+@keyframes bgFlashRed { 0% { background-color: #ffcdd2; } 100% { background-color: inherit; } }
+
+#bgmToggleBtn { position: absolute; top: 10px; right: 10px; font-size: 1.5em; background: rgba(255,255,255,0.7); border-radius: 50%; width: 45px; height: 45px; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+#gameContainer { width: 100%; max-width: 600px; margin: 0 auto; display: flex; justify-content: center; }
+
+
+/* =========================================
+   5. 新規演出用アニメーション (追加分)
+   ========================================= */
+
+/* --- ① 手応え演出：クリックした場所に出るポップアップ (+2秒 etc) --- */
+.floating-text {
+    position: fixed; /* 画面上の絶対位置に固定 */
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-weight: 900;
+    font-size: 1.8em;
+    pointer-events: none; /* クリックを邪魔しない */
+    z-index: 9999; /* 最前面 */
+    text-shadow: 
+        2px 2px 0 #fff, 
+        -2px -2px 0 #fff,
+        -2px 2px 0 #fff, 
+        2px -2px 0 #fff; /* 白いフチ取り */
+    opacity: 0;
+    animation: floatUpFade 0.8s ease-out forwards;
+}
+
+/* ポップアップの色定義 */
+.float-plus { color: #00e676; font-size: 2.2em; } /* 緑（回復）は大きく */
+.float-minus { color: #ff1744; } /* 赤（ダメージ） */
+
+/* ふわっと上がって消える動き */
+@keyframes floatUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.5);
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-80px) scale(1.0);
+    }
+}
+
+
+/* --- ② コンボ表示：文字の「弾み」を強化 --- */
+/* 既存の .combo-display-bg を強化します */
+.combo-display-bg {
+    /* 既存のスタイルは維持しつつ、アニメーション用クラスで動きをつける */
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* コンボが増えた瞬間に付与するクラス */
+.combo-pop {
+    animation: comboBounce 0.3s forwards;
+    color: rgba(255, 215, 0, 0.8); /* 金色に光る */
+    text-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+}
+
+@keyframes comboBounce {
+    0% { transform: translateX(-50%) rotate(-10deg) scale(1.0); }
+    50% { transform: translateX(-50%) rotate(-5deg) scale(1.5); } /* 巨大化 */
+    100% { transform: translateX(-50%) rotate(-10deg) scale(1.0); }
+}
+
+
+/* --- ③ ステージ変化カットイン：LEVEL UP演出 --- */
+/* HTMLに動的に追加する要素用 */
+#stageAnnouncement {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* 最初は隠しておく */
+    
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 30px 60px;
+    border-radius: 20px;
+    border: 5px solid #00bcd4;
+    box-shadow: 0 0 30px #00bcd4;
+    
+    font-size: 3em;
+    font-weight: 900;
+    white-space: nowrap;
+    z-index: 10000; /* 完全に最前面 */
+    pointer-events: none;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.stage-sub-text {
+    font-size: 0.4em;
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+/* カットインのアニメーション（バァン！と出てスッと消える） */
+.announce-active {
+    animation: cutInAnimation 1.5s ease-in-out forwards;
+}
+
+@keyframes cutInAnimation {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+        opacity: 0;
+    }
+    15% {
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg); /* 勢いよく拡大 */
+        opacity: 1;
+    }
+    25% {
+        transform: translate(-50%, -50%) scale(1.0); /* 少し戻る */
+    }
+    80% {
+        transform: translate(-50%, -50%) scale(1.0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5); /* 最後は拡大しながら消える */
+        opacity: 0;
+    }
+}

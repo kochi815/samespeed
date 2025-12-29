@@ -1,406 +1,164 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>サメスピードチャレンジ</title>
-  <style>
-    /* 修正点1: bodyスタイルを統合し、#bodyセレクタを削除 */
-    body {
-      font-family: 'M PLUS Rounded 1c', sans-serif;
-      text-align: center;
-      background-color: #e0f7fa; /* 水色系背景 */
-      margin: 0;
-      padding: 15px;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      min-height: 100vh;
-      overflow-y: auto; /* 初期はスクロール可 */
-      padding-bottom: 30px;
-      height: 100%;
-      color: #444;
-    }
-    html {
-      height: 100%;
-    }
-
-    h1 {
-      font-size: 2em;
-      color: #00796b; /* 少し濃い青緑 */
-      font-weight: 700;
-      margin-top: 20px;
-      margin-bottom: 15px;
-    }
-
-    #question {
-      font-size: 4.5em;
-      margin: 30px 0 30px 0;
-      color: #004d40; /* 濃い緑 */
-      font-weight: 700;
-      line-height: 1.2;
-      min-height: 1.5em;
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    #questionNumber, #timer {
-        font-size: 1.1em;
-        color: #004d40;
-        margin: 3px 0;
-    }
-    #coinInfo {
-        font-size: 1.1em;
-        color: #004d40;
-        margin-bottom: 10px;
-    }
-    #titleBadge {
-        font-size: 1.3em;
-        color: #00acc1; /* ボタンと同系色 */
-        margin: 15px 0;
-        font-weight: 700;
-        min-height: 1.3em;
-    }
-    #info {
-      font-size: 1.2em;
-      color: #006064; /* やや濃いシアン */
-      margin-bottom: 20px;
-      min-height: 1.5em;
-    }
-
-    #startBtn, #homeBtn, #rankBtn {
-      font-family: 'M PLUS Rounded 1c', sans-serif;
-      font-size: 1.3em;
-      padding: 15px 35px;
-      margin: 10px;
-      border: none;
-      border-radius: 30px;
-      background-color: #00acc1; /* シアン */
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.2s, transform 0.1s;
-      font-weight: 700;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    #startBtn:hover, #homeBtn:hover, #rankBtn:hover {
-      background-color: #00838f; /* 少し濃いシアン */
-    }
-    #startBtn:active, #homeBtn:active, #rankBtn:active {
-        transform: scale(0.97);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    #rankList {
-      display: none;
-      margin-top: 25px;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: left;
-      font-size: 1em;
-      max-width: 500px;
-      width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-      color: #004d40;
-      border: 1px solid #b2ebf2; /* 薄いシアン */
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    #rankList h2 {
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 15px;
-      color: #00796b;
-      font-size: 1.4em;
-      font-weight: 700;
-    }
-    #rankList ul {
-      list-style: none;
-      padding: 0;
-    }
-    #rankList li {
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px dashed #e0f7fa; /* 背景と同系色の薄い色 */
-      line-height: 1.5;
-    }
-    #rankList li:last-child {
-      border-bottom: none;
-    }
-
-    .highlight {
-      color: #00796b;
-      font-weight: bold;
-    }
-
-    @keyframes fadeInScaleUp {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .animate-reveal {
-      animation: fadeInScaleUp 0.3s ease-out;
-    }
-
-    /* レスポンシブ対応は省略（必要であれば前のコードからコピー） */
-    @media (max-width: 600px) {
-        body { padding: 10px; padding-bottom: 20px; }
-        h1 { font-size: 1.8em; }
-        #question { font-size: 3.5em; margin: 20px 0 20px 0; }
-        #startBtn, #homeBtn, #rankBtn { font-size: 1.1em; padding: 12px 30px; border-radius: 25px; }
-        #rankList { width: 90%; padding: 15px; }
-        #rankList h2 { font-size: 1.3em; }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ねこ計算サバイバル</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>サメスピードチャレンジ</h1>
-  <div id="coinInfo">🪙 サメコイン: 0</div>
-  <div id="info">スタートボタンを押してね</div>
-  <div id="questionNumber"></div>
-  <div id="timer"></div>
-  <div id="question">🦈</div>
-  <div id="titleBadge"></div>
-  <div id="rankList">
-    <h2>🏅 称号と報酬一覧</h2>
-    <ul style="list-style: none; padding: 0;">
-      <li>🚀 神速サメ：200コイン（～45.0秒）</li>
-      <li>⚡ 電光サメ：150コイン（～50.0秒）</li>
-      <li>💨 はやザメ：120コイン（～55.0秒）</li>
-      <li>🏄 スイスイサメ：90コイン（～60.0秒）</li>
-      <li>😎 がんばりザメ：70コイン（～65.0秒）</li>
-      <li>🙂 ふつうザメ：50コイン（～70.0秒）</li>
-      <li>🐢 のんびりサメ：30コイン（～75.0秒）</li>
-      <li>😴 うとうとサメ：15コイン（～80.0秒）</li>
-      <li>🐌 まったりサメ：5コイン（80.1秒～）</li>
-    </ul>
-  </div>
-  <button id="startBtn">スタート</button>
-  <button id="homeBtn" style="display: none;">ホームにもどる</button>
-  <button id="rankBtn" style="display: inline-block;">称号一覧</button>
+    
+    <button id="bgmToggleBtn">🔊</button>
 
-<script>
-    const totalQuestions = 20; // 問題数
-    let problems = [];
-    let selected = [];
-    let index = 0;
-    let showingAnswer = false;
-    let startTime = null;
-    let gameStarted = false;
-    let timerInterval;
+    <div id="gameContainer">
+        
+        <div id="modeSelectScreen" class="screen">
+            <h1 class="title-logo">🐱 ねこ計算サバイバル ⏱️</h1>
+            <p class="subtitle">めざせ！計算マスター</p>
 
-    // DOM要素取得
-    const question = document.getElementById("question");
-    const questionNumber = document.getElementById("questionNumber");
-    const timer = document.getElementById("timer");
-    const info = document.getElementById("info");
-    const titleBadge = document.getElementById("titleBadge");
-    const startBtn = document.getElementById("startBtn");
-    const homeBtn = document.getElementById("homeBtn");
-    const coinInfo = document.getElementById("coinInfo");
-    const rankBtn = document.getElementById("rankBtn");
-    const rankList = document.getElementById("rankList");
+            <button id="showRankingBtn" class="main-menu-btn">🏆 ランキングを見る</button>
 
-    // --- 修正点2: 称号とコインのロジックを統合 ---
-    const ranks = [
-      { maxTime: 45.0, title: "🚀 神速サメ", coins: 200 },
-      { maxTime: 50.0, title: "⚡ 電光サメ", coins: 150 },
-      { maxTime: 55.0, title: "💨 はやザメ", coins: 120 },
-      { maxTime: 60.0, title: "🏄 スイスイサメ", coins: 90 },
-      { maxTime: 65.0, title: "😎 がんばりザメ", coins: 70 },
-      { maxTime: 70.0, title: "🙂 ふつうザメ", coins: 50 },
-      { maxTime: 75.0, title: "🐢 のんびりサメ", coins: 30 },
-      { maxTime: 80.0, title: "😴 うとうとサメ", coins: 15 },
-      { maxTime: Infinity, title: "🐌 まったりサメ", coins: 5 } // 最後のエントリー
-    ];
+            <div class="mode-grid">
+                <div class="grade-section">
+                    <button class="mode-btn" data-type="addsub1">
+                        かんたん 計算
+                        <span class="best-badge" id="badge-addsub1">👑 --</span>
+                    </button>
+                    <button class="mode-btn" data-type="addsub1_hole">
+                        かんたん 穴あき
+                        <span class="best-badge" id="badge-addsub1_hole">👑 --</span>
+                    </button>
+                    <button class="mode-btn" data-type="addsub2">
+                        ふつう 計算
+                        <span class="best-badge" id="badge-addsub2">👑 --</span>
+                    </button>
+                    <button class="mode-btn" data-type="addsub2_hole">
+                        ふつう 穴あき
+                        <span class="best-badge" id="badge-addsub2_hole">👑 --</span>
+                    </button>
+                    <button class="mode-btn" data-type="mul">
+                        かけ算 (九九)
+                        <span class="best-badge" id="badge-mul">👑 --</span>
+                    </button>
+                    <button class="mode-btn" data-type="mul_hole">
+                        かけ算 穴あき
+                        <span class="best-badge" id="badge-mul_hole">👑 --</span>
+                    </button>
+                    <button class="mode-btn" data-type="div">
+                        わり算
+                        <span class="best-badge" id="badge-div">👑 --</span>
+                    </button>
+                    <button class="mode-btn" data-type="div_hole">
+                        わり算 穴あき
+                        <span class="best-badge" id="badge-div_hole">👑 --</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    // 時間に応じたランク情報（称号とコイン）を取得する関数
-    function getRank(time) {
-      const numericTime = parseFloat(time); // 比較のために数値に変換
-      for (const rank of ranks) {
-        if (numericTime <= rank.maxTime) {
-          return rank;
-        }
-      }
-      // 通常はInfinityでキャッチされるが、念のため最後を返す
-      return ranks[ranks.length - 1];
-    }
-    // --- 修正点2 ここまで ---
+        <div id="rankingViewScreen" class="screen">
+            <h2>🏆 みんなの記録 🏆</h2>
+            <p class="ranking-instruction">見たいモードを選んでね</p>
+            
+            <div class="ranking-tabs">
+                <button class="rank-tab-btn active" data-target="addsub1">1年<br>計算</button>
+                <button class="rank-tab-btn" data-target="addsub1_hole">1年<br>穴あき</button>
+                <button class="rank-tab-btn" data-target="mul">4年<br>かけ算</button>
+                <button class="rank-tab-btn" data-target="div">4年<br>わり算</button>
+                </div>
 
-    rankBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      rankList.style.display = rankList.style.display === "none" ? "block" : "none";
-      // サウンドは今回なし
-    });
+            <div class="ranking-display-box">
+                <h3 id="rankingViewTitle">1年 かんたん計算</h3>
+                <table id="fullRankingTable">
+                    <thead>
+                        <tr>
+                            <th>順位</th>
+                            <th>名前</th>
+                            <th>スコア</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fullRankingBody">
+                        </tbody>
+                </table>
+            </div>
 
-    function toggleRankButton(show) {
-      rankBtn.style.display = show ? "inline-block" : "none";
-    }
+            <button id="backFromRankingBtn" class="sub-btn">もどる</button>
+        </div>
 
-    // localStorageのキーを'sharkCoins'に変更
-    function getCoins() {
-      return parseInt(localStorage.getItem("sharkCoins") || "0");
-    }
+        <div id="gameScreen" class="screen">
+            <div id="timeGaugeHeader">
+                <div id="timeGaugeContainer">
+                    <div id="timeGaugeBar"></div>
+                </div>
+                <div id="timeText">40.00</div>
+            </div>
 
-    function setCoins(value) {
-      localStorage.setItem("sharkCoins", value);
-      coinInfo.textContent = `🪙 サメコイン: ${value}`;
-    }
+            <div id="scoreHeader">たおした数: <span id="currentScore">0</span></div>
 
-    function generateProblems() {
-      problems = [];
-      // 1桁+1桁の足し算を生成
-      for (let a = 1; a < 10; a++) { // 1から9
-        for (let b = 1; b < 10; b++) { // 1から9
-          // 簡単すぎる問題(例: 1+1)や繰り上がり有無などを考慮して調整も可能
-          problems.push({ q: `${a} + ${b}`, a: a + b });
-        }
-      }
-      // --- 修正点3: Fisher-Yatesシャッフルに変更 ---
-      for (let i = problems.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [problems[i], problems[j]] = [problems[j], problems[i]]; // 要素を入れ替え
-      }
-      // --- 修正点3 ここまで ---
-      selected = problems.slice(0, totalQuestions); // 20問選択
-    }
+            <button id="quitBtn">🏠 やめる</button>
 
-    function updateTimer() {
-      const now = Date.now();
-      const elapsed = ((now - startTime) / 1000).toFixed(1);
-      timer.textContent = `タイム: ${elapsed} 秒`;
-    }
+            <div id="enemyArea">
+                <div id="enemyCharacter">😼</div>
+                <div id="effectContainer"></div>
+            </div>
 
-    // 問題表示関数 (アニメーション適用)
-    function showQuestion() {
-      if (index < selected.length) {
-        questionNumber.textContent = `(${index + 1}/${totalQuestions})`;
-        // --- 修正点7: アニメーション適用 ---
-        question.textContent = selected[index].q;
-        question.classList.remove('animate-reveal');
-        void question.offsetWidth;
-        question.classList.add('animate-reveal');
-        // --- 修正点7 ここまで ---
-        showingAnswer = false;
-      } else {
-        endGame();
-      }
-    }
+            <div id="questionArea">
+                <div id="questionText"></div>
+                <div id="answerChoices"></div>
+            </div>
+        </div>
 
-    // 回答表示関数 (アニメーション適用)
-    function showAnswer() {
-      // --- 修正点7: アニメーション適用 ---
-      question.textContent = selected[index].a;
-      question.classList.remove('animate-reveal');
-      void question.offsetWidth;
-      question.classList.add('animate-reveal');
-      // --- 修正点7 ここまで ---
-      showingAnswer = true;
-    }
+        <div id="resultScreen" class="screen">
+            <h2>タイムアップ！</h2>
+            
+            <div class="final-score-area">
+                <div>今回のきろく</div>
+                <div id="finalScoreDisplay">0 ひき</div>
+            </div>
 
-    function nextStep() {
-      if (!gameStarted) return;
-      if (!showingAnswer) {
-        showAnswer();
-      } else {
-        index++;
-        showQuestion();
-      }
-    }
+            <div id="rankInInputArea" style="display: none;">
+                <div class="rank-in-msg">🎉 自己ベスト更新！ 🎉</div>
+                <p>だれの記録かな？</p>
+                <div class="user-select-buttons">
+                    <button class="user-btn" data-name="パパ">👨 パパ</button>
+                    <button class="user-btn" data-name="ママ">👩 ママ</button>
+                    <button class="user-btn" data-name="ゆき">👧 ゆき</button>
+                    <button class="user-btn" data-name="あお">👶 あお</button>
+                    <button class="user-btn" data-name="ゲスト">👤 ゲスト</button>
+                </div>
+            </div>
 
-    // assignTitle と calculateCoins 関数は不要になったため削除
+            <div id="rankingBoardArea">
+                <h3>🏆 ランキング 🏆</h3>
+                <div id="rankingListName" style="margin-bottom: 5px; font-size: 0.9em; color:#666;"></div>
+                <table id="rankingTable">
+                    <thead>
+                        <tr>
+                            <th>順位</th>
+                            <th>名前</th>
+                            <th>スコア</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingListBody">
+                        </tbody>
+                </table>
+            </div>
 
-    function endGame() {
-      toggleRankButton(true);
-      clearInterval(timerInterval);
-      gameStarted = false;
-      homeBtn.style.display = "inline-block";
-      const endTime = Date.now();
-      const elapsed = ((endTime - startTime) / 1000).toFixed(1);
+            <div class="result-buttons">
+                <button id="retryBtn" class="action-btn">もう一回！</button>
+                <button id="backToTitleBtn" class="sub-btn">モード選択へ</button>
+            </div>
+        </div>
 
-      // --- 修正点2: getRank関数を使う ---
-      const resultRank = getRank(elapsed);
-      info.innerHTML = `<span class="highlight">おわり！タイム：${elapsed} 秒</span>`;
-      titleBadge.textContent = resultRank.title;
-      const earned = resultRank.coins;
-      // --- 修正点2 ここまで ---
+    </div>
 
-      const current = getCoins();
-      setCoins(current + earned);
+    <div id="feedbackOverlay"></div>
+    <div id="comboOverlay"></div>
 
-      // --- 修正点6: スクロールを有効に戻す ---
-      document.documentElement.style.overflowY = "auto";
-      document.body.style.overflowY = "auto";
-      // --- 修正点6 ここまで ---
-
-      setTimeout(() => {
-        alert(`🎉 ${earned} コインを獲得したよ！`);
-      }, 300);
-      // サウンド停止は今回なし
-    }
-
-    startBtn.addEventListener("click", () => {
-      document.documentElement.style.overflowY = "hidden";
-      document.body.style.overflowY = "hidden";
-      questionNumber.textContent = "";
-      timer.textContent = "";
-      toggleRankButton(false);
-      // --- 修正点5: 称号リストを隠す ---
-      rankList.style.display = "none";
-      // --- 修正点5 ここまで ---
-      generateProblems();
-      index = 0;
-      gameStarted = true;
-      startTime = Date.now();
-      startBtn.style.display = "none";
-      homeBtn.style.display = "none";
-      info.textContent = "がんばってね！";
-      titleBadge.textContent = "";
-      question.textContent = ''; // 前の問題をクリア
-      showQuestion();
-      timerInterval = setInterval(updateTimer, 100);
-      // サウンド開始は今回なし
-    });
-
-    homeBtn.addEventListener("click", () => {
-      // サウンド停止/再生は今回なし
-      // スクロール有効化はreloadされるので必須ではない
-      location.reload();
-    });
-
-    // --- 修正点4: bodyクリック判定の改善 ---
-    document.body.addEventListener("click", (e) => {
-      let targetElement = e.target;
-      let isButtonOrRankList = false;
-      // 無視する要素のIDリスト
-      const ignoreIds = ["startBtn", "rankBtn", "homeBtn"];
-
-      while (targetElement != null) {
-          // IDが一致するか、またはクリックした要素が#rankListの中にあるか
-          if (ignoreIds.includes(targetElement.id) || targetElement.closest('#rankList')) {
-              isButtonOrRankList = true;
-              break;
-          }
-          targetElement = targetElement.parentElement;
-      }
-
-      // ボタン・ランク一覧以外をクリックし、かつゲームが開始されている場合のみ進行
-      if (!isButtonOrRankList && gameStarted) {
-        // サウンド再生は今回なし
-        nextStep();
-      }
-    });
-    // --- 修正点4 ここまで ---
-
-    // 初期コイン表示
-    setCoins(getCoins());
-
-    window.addEventListener('resize', () => { /* リサイズ処理は省略 */ });
-  </script>
+    <script src="sound.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
